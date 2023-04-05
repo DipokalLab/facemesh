@@ -1,4 +1,5 @@
 import { OrbitControls } from "./jsm/OrbitControls.js";
+import { facemesh } from "./face.js"
 
 let state = {
     scene: undefined,
@@ -59,3 +60,4 @@ const init = () => {
 
 
 init()
+facemesh()
