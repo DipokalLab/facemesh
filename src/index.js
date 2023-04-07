@@ -7,6 +7,8 @@ let state = {
     renderer: undefined,
     controls: undefined,
     model: undefined,
+    bone: {},
+
     joystick: {
         isActivate: false
     }
@@ -19,8 +21,8 @@ const init = () => {
 
     const clock = new THREE.Clock();
 
-    state.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 100 );
-    state.camera.position.set( 0, 3, 7 );
+    state.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 10 );
+    state.camera.position.set( 0, 1, 9 );
     state.scene.add(state.camera);
 
 
@@ -44,6 +46,10 @@ const init = () => {
     hemiLight.position.set( 0, 120, 0 );
     state.scene.add(hemiLight);
 
+
+    state.controls = new OrbitControls( state.camera, state.renderer.domElement );
+
+    addFaceModel()
     
     function animate() {
         requestAnimationFrame( animate );
@@ -57,6 +63,48 @@ const init = () => {
     
 }
 
+
+function addFaceModel(params) {
+    const loader = new THREE.GLTFLoader();
+
+    loader.load('gltf/head.glb', ( gltf ) => {
+
+            state.model = gltf.scene
+            state.model.receiveShadow = true;
+            state.scene.add( state.model );
+
+            state.model.traverse( function ( object ) {
+                if (object.type == 'Bone') {
+                    state.bone[object.name] = object
+                }
+                if ( object.isMesh ) object.castShadow = true;
+            });
+
+            let helper = new THREE.SkeletonHelper( state.model );
+            helper.material.linewidth = 2;
+            helper.visible = true;
+            state.scene.add(helper);
+
+            gltf.animations; // Array<THREE.AnimationClip>
+            gltf.scene; // THREE.Group
+            gltf.scenes; // Array<THREE.Group>
+            gltf.cameras; // Array<THREE.Camera>
+            gltf.asset; // Object
+
+            console.log(state.bone)
+        },
+        function ( xhr ) {
+
+            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+        },
+        function ( error ) {
+
+            console.log( 'An error happened' );
+
+        }
+    );
+}
 
 
 init()

@@ -1,1 +1,14 @@
+#model {
+    position: absolute;
+}
 
+#app {
+    position: relative;
+}
+
+.container_input {
+    position: absolute;
+    z-index: 90;
+    padding: 1rem;
+    border-radius: 2rem;
+}
