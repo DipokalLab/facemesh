@@ -7,8 +7,8 @@ let state = {
     renderer: undefined,
     controls: undefined,
     model: undefined,
-
     bone: {},
+    dot: {},
     facemesh: undefined
 }
 
@@ -57,14 +57,30 @@ class Mesh {
         requestAnimationFrame( this.animate.bind(this) );
         let stateFacemesh = state.facemesh.state
 
-        //console.log(stateFacemesh.landmarks, state.bone['ORG-nose'])
-        if (state.bone['ORG-nose'] !== undefined) {
-            state.bone['ORG-nose'].position.x = stateFacemesh.landmarks[4].x
 
-            console.log(state.bone['ORG-nose'].position.x)
+        let horizontalAngle = this.getAngle(stateFacemesh.landmarks[134], stateFacemesh.landmarks[454], 'x', 'z') + 2.34
+        let verticalAngle = this.getAngle(stateFacemesh.landmarks[10], stateFacemesh.landmarks[152], 'y', 'z') - 3.14
+        let revolvingAngle = - this.getAngle(stateFacemesh.landmarks[10], stateFacemesh.landmarks[152], 'x', 'y') - 1.58
+
+        state.model.rotation.y = horizontalAngle
+        state.model.rotation.x = verticalAngle
+        state.model.rotation.z = revolvingAngle
+
+        if (state.bone['ORG-nose'] !== undefined) {
+            //state.bone['ORG-nose'].position.x = stateFacemesh.landmarks[4].x
+
+            //console.log(state.bone['ORG-nose'].position.x)
             
         }
         state.renderer.render( state.scene, state.camera );
+    }
+
+    getAngle(a,b,sX,sY) {
+        let defX =  a[sX] - b[sX];
+        let defY =  a[sY] - b[sY];
+        let angle = Math.atan2(defY, defX);
+        
+        return angle;
     }
 
     addFaceModel() {
@@ -102,5 +118,6 @@ class Mesh {
     }
     
 }
+
 
 new Mesh()
