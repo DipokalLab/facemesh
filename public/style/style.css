@@ -11,4 +11,10 @@
     z-index: 90;
     padding: 1rem;
     border-radius: 2rem;
+    
+}
+
+.output_canvas {
+    border-radius: 0.5rem;
+    width: 80%;
 }

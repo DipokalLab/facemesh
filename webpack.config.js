@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 export default 
 {
     "entry":["./src/index.js"],
-    "watch": true,
+    "watch": false,
     "output": {
         "filename": "bundle.js",
         "path": path.resolve(__dirname, 'dist'),
