@@ -9,7 +9,7 @@ services:
     ports:
       - 9018:9018
     environment:
-      VIRTUAL_HOST: chat.devent.kr
-      LETSENCRYPT_HOST: chat.devent.kr
+      VIRTUAL_HOST: facemesh.devent.kr
+      LETSENCRYPT_HOST: facemesh.devent.kr
       LETSENCRYPT_EMAIL: hhj@devent.kr
     network_mode: "bridge"
