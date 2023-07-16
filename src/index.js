@@ -56,23 +56,11 @@ class Mesh {
 
     animate() {
         requestAnimationFrame( this.animate.bind(this) );
-        let stateFacemesh = state.facemesh.state
-
 
         this.rotateFace()
         this.reformMouth()
         this.reformBrow()
 
-        if (state.bone['ORG-nose'] !== undefined) {
-            console.log(state.bone)
-            //state.bone['jaw_master'].rotation.x += 0.03
-            //state.bone['lipB'].rotation.y += 0.03
-
-            //state.bone['ORG-nose'].position.x = stateFacemesh.landmarks[4].x
-
-            //console.log(state.bone['ORG-nose'].position.x)
-            
-        }
         state.renderer.render( state.scene, state.camera );
     }
 
@@ -93,6 +81,10 @@ class Mesh {
     rotateFace() {
         let stateFacemesh = state.facemesh.state
 
+        if (stateFacemesh.landmarks.length == 0) {
+            return 0
+        }
+
         let horizontalAngle = this.getAngle(stateFacemesh.landmarks[134], stateFacemesh.landmarks[454], 'x', 'z') + 2.34
         let verticalAngle = this.getAngle(stateFacemesh.landmarks[10], stateFacemesh.landmarks[152], 'y', 'z') - 3.14
         let revolvingAngle = - this.getAngle(stateFacemesh.landmarks[10], stateFacemesh.landmarks[152], 'x', 'y') - 1.58
@@ -105,6 +97,10 @@ class Mesh {
     
     reformMouth() {
         let stateFacemesh = state.facemesh.state
+
+        if (stateFacemesh.landmarks.length == 0) {
+            return 0
+        }
 
         let heightMouth = this.getDistance(stateFacemesh.landmarks[13].y, stateFacemesh.landmarks[14].y)
         let widthMouth = this.getDistance(stateFacemesh.landmarks[291].y, stateFacemesh.landmarks[61].y)
@@ -119,14 +115,15 @@ class Mesh {
         state.bone["lipTR001_1"].position.y = state.initialBonePosition["lipTR001_1"].y - heightMouth / 3
 
         state.bone["jaw_master"].position.y = state.initialBonePosition["jaw_master"].y - heightMouth / 2
-
-        //state.bone["lipsL"].position.x = state.initialBonePosition["lipsL"].x + widthMouth * 2
-
     }
 
 
     reformBrow() {
         let stateFacemesh = state.facemesh.state
+
+        if (stateFacemesh.landmarks.length == 0) {
+            return 0
+        }
 
         let rightBrow = this.getDistance(stateFacemesh.landmarks[386].y, stateFacemesh.landmarks[282].y)
         let leftBrow = this.getDistance(stateFacemesh.landmarks[159].y, stateFacemesh.landmarks[52].y)
@@ -137,8 +134,6 @@ class Mesh {
         let headDist = this.getDistance(stateFacemesh.landmarks[103].x, stateFacemesh.landmarks[332].x)
 
         let relativeEyes = (0.4 * headDist / 2)
-
-        console.log(relativeEyes)
         
         state.bone["browTL002"].position.y = state.initialBonePosition["browTL002"].y + rightBrow / 2
         state.bone["browTL001"].position.y = state.initialBonePosition["browTL001"].y + rightBrow / 2
@@ -156,8 +151,6 @@ class Mesh {
         state.bone["MCH-lidTR002"].position.z = state.initialBonePosition["MCH-lidTR002"].z + (rightEye * 2) - relativeEyes
         state.bone["MCH-lidTR001"].position.z = state.initialBonePosition["MCH-lidTR001"].z + (rightEye * 2) - relativeEyes
         state.bone["MCH-lidTR003"].position.z = state.initialBonePosition["MCH-lidTR003"].z + (rightEye * 2) - relativeEyes
-
-        
 
         //state.bone["lipT"].position.y = state.initialBonePosition["lipT"].y - heightMouth / 2
     }
