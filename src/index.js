@@ -185,10 +185,15 @@ class Mesh {
                 helper.material.linewidth = 2;
                 helper.visible = true;
                 this.scene.add(helper);
-            },
-            function ( xhr ) {
+            }, ( xhr ) => {
+
+                const total = xhr.loaded / xhr.total * 100
     
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                console.log( total + '% loaded' );
+
+                if (total > 99) {
+                    this.fadeLoadAnimation()
+                }
     
             },
             function ( error ) {
@@ -197,6 +202,19 @@ class Mesh {
     
             }
         );
+    }
+
+    fadeLoadAnimation() {
+        setTimeout(() => {
+            document.querySelector("#load").classList.add('fadeout')
+
+        }, 2000); 
+
+        setTimeout(() => {
+
+            document.querySelector("#load").classList.add('d-none')
+
+        }, 2500);
     }
     
 }
