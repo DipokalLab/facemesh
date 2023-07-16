@@ -29,6 +29,12 @@ pipelines:
             - exec:
                 arguments:
                 - compose
+                - build
+                command: docker
+                run_if: passed
+            - exec:
+                arguments:
+                - compose
                 - up
                 - -d
                 command: docker
