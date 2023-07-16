@@ -8,20 +8,46 @@ class FaceToMesh {
             landmarks: []
         }
 
-        const faceMesh = new FaceMesh({locateFile: (file) => {
+        
+
+        this.faceMesh = new FaceMesh({locateFile: (file) => {
             return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
         }});
-        faceMesh.setOptions({
+        this.faceMesh.setOptions({
             maxNumFaces: 1,
             refineLandmarks: true,
             minDetectionConfidence: 0.5,
             minTrackingConfidence: 0.5
         });
-        faceMesh.onResults(this.onResults.bind(this));
+        this.faceMesh.onResults(this.onResults.bind(this));
         
+
+        this.startCamera()
+
+        canvasElement.addEventListener("click", this.toggleCamera.bind(this))
+    }
+
+    toggleCamera() {
+        if (canvasElement.classList.contains("hide")) {
+            this.showCamera()
+            return 0
+        }
+
+        this.hideCamera()
+    }
+
+    hideCamera() {
+        canvasElement.classList.add("hide")
+    }
+
+    showCamera() {
+        canvasElement.classList.remove("hide")
+    }
+
+    startCamera() {
         const camera = new Camera(videoElement, {
             onFrame: async () => {
-                await faceMesh.send({image: videoElement});
+                await this.faceMesh.send({image: videoElement});
             },
             width: 1280,
             height: 720
