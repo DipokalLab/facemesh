@@ -1,4 +1,7 @@
-import { OrbitControls } from "./jsm/OrbitControls.js";
+
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 import { FaceToMesh } from "./face.js"
 
 
@@ -26,7 +29,7 @@ class Mesh {
         this.scene.fog = new THREE.Fog( 0xa0a0a0, 10, 50 );
         
         this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.07, 100 );
-        this.camera.position.set( 0, 0.1, 0.9 );
+        this.camera.position.set( 0, 0.1, 2 );
         this.scene.add(this.camera);
     
         this.renderer = new THREE.WebGLRenderer();
@@ -110,7 +113,7 @@ class Mesh {
         let widthMouth = this.getDistance(stateFacemesh.landmarks[291].y, stateFacemesh.landmarks[61].y)
         
         this.bone["lipB"].position.y = this.initialBonePosition["lipB"].y + heightMouth / 2
-        this.bone["lipT"].position.y = this.initialBonePosition["lipT"].y - heightMouth / 2
+        this.bone["lipT"].position.y = this.initialBonePosition["lipT"].y - heightMouth / 3
 
         this.bone["lipB"].position.z = this.initialBonePosition["lipB"].z + heightMouth / 3
         this.bone["lipT"].position.z = this.initialBonePosition["lipT"].z - heightMouth / 3
@@ -118,7 +121,9 @@ class Mesh {
         this.bone["lipTL001_1"].position.y = this.initialBonePosition["lipTL001_1"].y - heightMouth / 3
         this.bone["lipTR001_1"].position.y = this.initialBonePosition["lipTR001_1"].y - heightMouth / 3
 
-        this.bone["jaw_master"].position.y = this.initialBonePosition["jaw_master"].y - heightMouth / 2
+        this.bone["jaw_master"].position.y = this.initialBonePosition["jaw_master"].y - heightMouth / 3
+
+
     }
 
 
@@ -156,6 +161,7 @@ class Mesh {
         this.bone["MCH-lidTR001"].position.z = this.initialBonePosition["MCH-lidTR001"].z + (rightEye * 2) - relativeEyes
         this.bone["MCH-lidTR003"].position.z = this.initialBonePosition["MCH-lidTR003"].z + (rightEye * 2) - relativeEyes
 
+
         //this.bone["lipT"].position.y = this.initialBonePosition["lipT"].y - heightMouth / 2
     }
 
@@ -166,7 +172,6 @@ class Mesh {
     
                 this.model = gltf.scene
                 this.model.receiveShadow = true;
-                this.scene.add( this.model );
     
                 this.model.traverse( ( object ) => {
                     if (object.type == 'Bone') {
@@ -180,16 +185,21 @@ class Mesh {
                     }
                     if ( object.isMesh ) object.castShadow = true;
                 });
+
+                this.scene.add( this.model );
+
     
-                let helper = new THREE.SkeletonHelper( this.model );
-                helper.material.linewidth = 2;
-                helper.visible = true;
-                this.scene.add(helper);
+                // let helper = new THREE.SkeletonHelper( this.model );
+                // helper.material.linewidth = 2;
+                // helper.visible = true;
+                // this.scene.add(helper);
+
+                
             }, ( xhr ) => {
 
                 const total = xhr.loaded / xhr.total * 100
     
-                console.log( total + '% loaded' );
+                document.querySelector("#percent").innerHTML = `${Math.floor(total)}%`
 
                 if (total > 99) {
                     this.fadeLoadAnimation()
