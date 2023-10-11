@@ -161,8 +161,6 @@ class Mesh {
         this.bone["MCH-lidTR001"].position.z = this.initialBonePosition["MCH-lidTR001"].z + (rightEye * 2) - relativeEyes
         this.bone["MCH-lidTR003"].position.z = this.initialBonePosition["MCH-lidTR003"].z + (rightEye * 2) - relativeEyes
 
-
-        //this.bone["lipT"].position.y = this.initialBonePosition["lipT"].y - heightMouth / 2
     }
 
     addFaceModel() {
